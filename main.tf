@@ -328,11 +328,11 @@ resource "aws_security_group_rule" "allow_icmp_ingress" {
 }
 
 resource "aws_security_group_rule" "alb" {
-  count                    = local.create_security_group && var.use_alb_security_group ? 1 : 0
-  description              = "Allow inbound traffic from ALB"
+  for_each                 = var.container_ports
+  description              = "Allow inbound traffic to port ${each.key} from ALB"
   type                     = "ingress"
-  from_port                = var.container_port
-  to_port                  = var.container_port
+  from_port                = each.key
+  to_port                  = each.key
   protocol                 = "tcp"
   source_security_group_id = var.alb_security_group
   security_group_id        = join("", aws_security_group.ecs_service.*.id)
@@ -350,7 +350,7 @@ resource "aws_security_group_rule" "nlb" {
 }
 
 resource "aws_ecs_service" "ignore_changes_task_definition" {
-  count                              = local.ecs_service_enabled && var.ignore_changes_task_definition && ! var.ignore_changes_desired_count ? 1 : 0
+  count                              = local.ecs_service_enabled && var.ignore_changes_task_definition && !var.ignore_changes_desired_count ? 1 : 0
   name                               = module.this.id
   task_definition                    = coalesce(var.task_definition, "${join("", aws_ecs_task_definition.default.*.family)}:${join("", aws_ecs_task_definition.default.*.revision)}")
   desired_count                      = var.desired_count
@@ -536,7 +536,7 @@ resource "aws_ecs_service" "ignore_changes_task_definition_and_desired_count" {
 }
 
 resource "aws_ecs_service" "ignore_changes_desired_count" {
-  count                              = local.ecs_service_enabled && ! var.ignore_changes_task_definition && var.ignore_changes_desired_count ? 1 : 0
+  count                              = local.ecs_service_enabled && !var.ignore_changes_task_definition && var.ignore_changes_desired_count ? 1 : 0
   name                               = module.this.id
   task_definition                    = coalesce(var.task_definition, "${join("", aws_ecs_task_definition.default.*.family)}:${join("", aws_ecs_task_definition.default.*.revision)}")
   desired_count                      = var.desired_count
@@ -629,7 +629,7 @@ resource "aws_ecs_service" "ignore_changes_desired_count" {
 }
 
 resource "aws_ecs_service" "default" {
-  count                              = local.ecs_service_enabled && ! var.ignore_changes_task_definition && ! var.ignore_changes_desired_count ? 1 : 0
+  count                              = local.ecs_service_enabled && !var.ignore_changes_task_definition && !var.ignore_changes_desired_count ? 1 : 0
   name                               = module.this.id
   task_definition                    = coalesce(var.task_definition, "${join("", aws_ecs_task_definition.default.*.family)}:${join("", aws_ecs_task_definition.default.*.revision)}")
   desired_count                      = var.desired_count

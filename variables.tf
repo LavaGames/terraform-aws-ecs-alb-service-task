@@ -9,7 +9,7 @@ variable "ecs_cluster_arn" {
 }
 
 variable "ecs_load_balancers" {
-  type = list(map(string))
+  type        = list(map(string))
   description = "A list of load balancer config objects for the ECS service; see [ecs_service#load_balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service#load_balancer) docs"
   default     = []
 }
@@ -70,10 +70,10 @@ variable "alb_security_group" {
   default     = ""
 }
 
-variable "container_port" {
+variable "container_ports" {
   type        = number
-  description = "The port on the container to allow traffic from the ALB security group"
-  default     = 80
+  description = "The ports on the container to allow traffic from the ALB security group"
+  default     = [80]
 }
 
 variable "use_nlb_cidr_blocks" {
