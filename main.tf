@@ -328,7 +328,7 @@ resource "aws_security_group_rule" "allow_icmp_ingress" {
 }
 
 resource "aws_security_group_rule" "alb" {
-  for_each                 = var.container_ports
+  for_each                 = toset([for v in var.container_ports : tostring(v)])
   description              = "Allow inbound traffic to port ${each.key} from ALB"
   type                     = "ingress"
   from_port                = each.key

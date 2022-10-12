@@ -71,7 +71,7 @@ variable "alb_security_group" {
 }
 
 variable "container_ports" {
-  type        = number
+  type        = list(number)
   description = "The ports on the container to allow traffic from the ALB security group"
   default     = [80]
 }
