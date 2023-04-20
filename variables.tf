@@ -460,6 +460,6 @@ variable "ecs_service_enabled" {
 }
 
 variable "redeployment_trigger" {
-  description = "Value that, when changed, will trigger an in-place update (redeployment)"
+  description = "A map of key/value pairs to trigger redeployment of the service"
   default     = null
 }
