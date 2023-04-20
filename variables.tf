@@ -260,14 +260,14 @@ variable "runtime_platform" {
 
 variable "efs_volumes" {
   type = list(object({
-    host_path = string
-    name      = string
+    host_path                = string
+    name                     = string
     efs_volume_configuration = list(object({
       file_system_id          = string
       root_directory          = string
       transit_encryption      = string
       transit_encryption_port = string
-      authorization_config = list(object({
+      authorization_config    = list(object({
         access_point_id = string
         iam             = string
       }))
@@ -290,8 +290,8 @@ variable "bind_mount_volumes" {
 
 variable "docker_volumes" {
   type = list(object({
-    host_path = string
-    name      = string
+    host_path                   = string
+    name                        = string
     docker_volume_configuration = list(object({
       autoprovision = bool
       driver        = string
@@ -307,11 +307,11 @@ variable "docker_volumes" {
 
 variable "fsx_volumes" {
   type = list(object({
-    host_path = string
-    name      = string
+    host_path                                    = string
+    name                                         = string
     fsx_windows_file_server_volume_configuration = list(object({
-      file_system_id = string
-      root_directory = string
+      file_system_id       = string
+      root_directory       = string
       authorization_config = list(object({
         credentials_parameter = string
         domain                = string
@@ -457,4 +457,9 @@ variable "ecs_service_enabled" {
   type        = bool
   description = "Whether or not to create the aws_ecs_service resource"
   default     = true
+}
+
+variable "redeployment_trigger" {
+  description = "Value that, when changed, will trigger an in-place update (redeployment)"
+  default     = null
 }

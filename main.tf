@@ -715,4 +715,8 @@ resource "aws_ecs_service" "default" {
       rollback = var.circuit_breaker_rollback_enabled
     }
   }
+
+  triggers = {
+    redeployment = var.redeployment_trigger
+  }
 }
