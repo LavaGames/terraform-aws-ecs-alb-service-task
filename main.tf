@@ -716,7 +716,5 @@ resource "aws_ecs_service" "default" {
     }
   }
 
-  triggers = {
-    redeployment = var.redeployment_trigger
-  }
+  triggers = var.redeployment_trigger
 }
